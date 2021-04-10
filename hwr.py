@@ -3,9 +3,28 @@ from keras.layers import Conv2D, MaxPooling2D, BatchNormalization, Dropout, Flat
 from keras.datasets import mnist
 from keras.preprocessing.image import ImageDataGenerator as IDG
 import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from random import randint
 
 (xTrain, yTrain), (xTest, yTest) = mnist.load_data()
 xTrain, xTest = xTrain / 255.0, xTest / 255.0
+
+unique, counts = np.unique(yTrain, return_counts=True)
+data = {'Digits': [i for i in unique], 'Number of images': [i for i in counts]}
+df = pd.DataFrame(data)
+sns.barplot(x='Digits', y='Number of images', data=df)
+
+
+def showIm(n):
+    plt.figure()
+    plt.imshow(np.array(xTrain[n]).reshape((28, 28)), cmap='binary_r')
+    plt.xlabel(f"Value: {yTrain[n]}", fontsize=18)
+    plt.show()
+
+
+showIm(randint(0, 10000))
 
 xTrain = np.reshape(xTrain, (-1, 28, 28, 1))
 print(xTrain.shape)
